@@ -1,6 +1,6 @@
 
-const channel = new BroadcastChannel("layout_channel");
+const channel = new BroadcastChannel("broadcast_channel");
 
 function changeLayout(layoutType){
-  channel.postMessage({ layout_id: layoutType});
+  channel.postMessage({ type: "layout_change",layout_id: layoutType});
 }

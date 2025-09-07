@@ -38,9 +38,12 @@ def bible_search():
             results = query.all()
             results_json = [r.to_dict() for r in results]
 
-            socketio.emit("bible_search_results", {"bible_search_results": results_json})
+            # socketio.emit("bible_search_results", {"bible_search_results": results_json})
             flash("Bible search results sent to the display.", "success")
-            return render_template("bible_search_form.html", form=form, sermon_form=sermon_form)
+            return render_template("bible_search_form.html",
+                                   form=form,
+                                   sermon_form=sermon_form,
+                                   bible_search_results_json=results_json)
 
 
         # --- Sermon Metadata form submitted ---
@@ -56,9 +59,12 @@ def bible_search():
                 "pianist_name":     sermon_form.pianist_name.data or "",
             }
 
-            socketio.emit("sermon_metadata", {"sermon_metadata": sermon_metadata_dict})
+            # socketio.emit("sermon_metadata", {"sermon_metadata": sermon_metadata_dict})
             flash("Sermon metadata sent to the display.", "success")
-            return render_template("bible_search_form.html", form=form, sermon_form=sermon_form)
+            return render_template("bible_search_form.html",
+                                   form=form,
+                                   sermon_form=sermon_form,
+                                   sermon_metadata=sermon_metadata_dict)
 
 
     # GET (or failed POST) – show both forms
@@ -70,8 +76,9 @@ def announcement_search():
 
     if form.validate_on_submit():
         google_slide_url = form.google_slide_url.data
-        socketio.emit("google_slides_url_result", {"google_slides_url_result": google_slide_url})
-        return render_template("announcement_search_form.html", form=form)
+        # socketio.emit("google_slides_url_result", {"google_slides_url_result": google_slide_url})
+        return render_template("announcement_search_form.html",
+                               form=form, google_slide_url=google_slide_url)
 
     return render_template("announcement_search_form.html", form=form)
 

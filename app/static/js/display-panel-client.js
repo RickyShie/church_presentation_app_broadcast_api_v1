@@ -10,10 +10,13 @@ const layouts = ["bible-search", "hymn-search", "display-announcement"];
 const pill = document.getElementById("current-pill");
 
 
-const channel = new BroadcastChannel("layout_channel");
+const channel = new BroadcastChannel("broadcast_channel");
 
 channel.onmessage = (event) => {
-  showLayout(event.data.layout_id);
+  if (event.data.type === "layout_change") {
+    showLayout(event.data.layout_id);
+  }
+
 };
 
 function getEmbeddableSlidesUrl(input) {
