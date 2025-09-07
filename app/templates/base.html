@@ -13,9 +13,9 @@
   <h1>控制面板</h1>
 
   <div class="nav-tabs">
-    <a id="bible-search" href="{{ url_for('bible_search') }}" class="tab {% if active_tab == 'bible' %}active{% endif %} control_button">📖 經節查詢 & 設定講道題目 & 顯示聖工人員</a>
+    <a id="bible-search" onclick="changeLayout('bible-search')" href="{{ url_for('bible_search') }}" class="tab {% if active_tab == 'bible' %}active{% endif %} control_button">📖 經節查詢 & 設定講道題目 & 顯示聖工人員</a>
 <!--    <a id="hymn-search" href="#" class="tab {% if active_tab == 'hymn' %}active{% endif %} control_button">🎵 Hymn Search</a>-->
-    <a id="display-announcement" href="{{ url_for('announcement_search') }}" class="tab {% if active_tab == 'announcements' %}active{% endif %} control_button">📢 宣布事項</a>
+    <a id="display-announcement" onclick="changeLayout('display-announcement')" href="{{ url_for('announcement_search') }}" class="tab {% if active_tab == 'announcements' %}active{% endif %} control_button">📢 宣布事項</a>
   </div>
 
   {% block content %}{% endblock %}
