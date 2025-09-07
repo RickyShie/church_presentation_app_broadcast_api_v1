@@ -1,0 +1,27 @@
+# PyCharm specific files
+.idea/
+
+# Python specific files
+*.pyc
+__pycache__/
+.Python
+venv/
+env/
+.venv/
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Flask specific files (if applicable)
+# For example, if you have a database file in a specific location
+# database.db
+# upload_folder/
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
+.flaskenv
