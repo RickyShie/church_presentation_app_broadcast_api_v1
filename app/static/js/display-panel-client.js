@@ -61,10 +61,17 @@ const channel = new BroadcastChannel("broadcast_channel");
 const bibleSearchResultsChannel = new BroadcastChannel("bible_search_results_channel");
 const layouts = ["bible-search", "hymn-search", "display-announcement"];
 const pill = document.getElementById("current-pill");
+const fullScreenButton = document.getElementById("fullscreen-btn");
 
 channel.onmessage = (event) => {
   if (event.data.type === "layout_change") {
-    showLayout(event.data.layout_id);
+    const layoutId = event.data.layout_id;
+    showLayout(layoutId);
+    if (layoutId === "display-announcement") {
+      fullScreenButton.style.display = "none";
+    } else {
+      fullScreenButton.style.display = "";
+    }
   } else if (event.data.type === "bible_search") {
     displayBibleSearchResults(event);
   } else if (event.data.type === "set_sermon_metadata") {
@@ -88,6 +95,29 @@ channel.onmessage = (event) => {
     closing_hymn = sermon_metadata.closing_hymn;
     hymns.innerHTML = `讚美詩${opening_hymn}<br/>讚美詩${closing_hymn}`;
     pianist_name.textContent = `ピアノ：${sermon_metadata.pianist_name}`;
-  }
+  } else if (event.data.type === "announcement_display") {
+    const container = document.getElementById("google-slides");
+    const raw = (event.data?.resulting_url || "").trim() ;
+    const url = getEmbeddableSlidesUrl(raw);
+    if (!url) {
+      console.warn("Not an embeddable Slides URL. Use Publish → Embed.");
+      return;
+    }
+    const iframe = document.createElement("iframe");
+    iframe.id = "google-slides";
+    iframe.src = url;
+    iframe.width = "100%";
+    iframe.height = "600";
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute("allowfullscreen", "true");
+    iframe.setAttribute("loading", "lazy");
+    // Needed for Google to run its player:
+    iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation");
+    container.parentNode.replaceChild(iframe, container);
+    console.log(fullScreenButton);
+//    fullScreenButton.style.display = "none";
+  } else {
+//    fullScreenButton.style.display = "block";
+  };
 
 };

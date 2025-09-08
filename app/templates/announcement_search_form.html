@@ -18,5 +18,11 @@
       {{ form.submit }}
     </div>
   </form>
+    {% if google_slide_url %}
+      <script>
+        const result_url = {{ google_slide_url | tojson }};
+        channel.postMessage({ type: "announcement_display", resulting_url: result_url });
+      </script>
+    {% endif %}
 </div>
 {% endblock %}
