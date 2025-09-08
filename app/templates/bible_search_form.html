@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Bible Search Form{% endblock %}
 {% block content %}
+<script defer src="{{ url_for('static', filename='js/bible-search-form.js') }}"></script>
 <div class="form-grid">
 
   <form action="" method="post" novalidate>
@@ -47,42 +48,12 @@
       </p>
     {{ form.submit(class="btn btn-primary") }}
 </form>
-  <form action="" method="post" novalidate>
-    <h2>設定講道題目 & 讚美詩</h2>
-    {{ sermon_form.hidden_tag() }}
-    <h3>{{ sermon_form.service_type.label }}</h3>
-    <p>
-        {{ sermon_form.service_type }}
-    </p>
-    <h3>{{ sermon_form.jp_sermon_topic.label }}</h3>
-    <p>
-        {{ sermon_form.jp_sermon_topic }}
-    </p>
-    <h3>{{ sermon_form.cn_sermon_topic.label }}</h3>
-    <p>
-        {{ sermon_form.cn_sermon_topic }}
-    </p>
-    <h3>{{ sermon_form.speaker_name.label }}</h3>
-    <p>
-        {{ sermon_form.speaker_name }}
-    </p>
-    <h3>{{ sermon_form.interpreter_name.label }}</h3>
-    <p>
-        {{ sermon_form.interpreter_name }}
-    </p>
-    <h3>{{ sermon_form.opening_hymn.label }}</h3>
-    <p>
-        {{ sermon_form.opening_hymn }}
-    </p>
-    <h3>{{ sermon_form.closing_hymn.label }}</h3>
-    <p>
-        {{ sermon_form.closing_hymn }}
-    </p>
-    <h3>{{ sermon_form.pianist_name.label }}</h3>
-    <p>
-        {{ sermon_form.pianist_name }}
-    </p>
-    {{ sermon_form.submit(class="btn btn-primary") }}
-</form>
+    {% if bible_search_results_json %}
+      <script>
+          const bibleSearchResultsChannel = new BroadcastChannel("bible_search_results_channel");
+          const results = {{ bible_search_results_json | tojson }};
+          bibleSearchResultsChannel.postMessage({ bible_search_results: results });
+      </script>
+    {% endif %}
 </div>
 {% endblock %}

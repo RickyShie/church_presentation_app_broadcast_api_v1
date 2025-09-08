@@ -11,12 +11,42 @@ const pill = document.getElementById("current-pill");
 
 
 const channel = new BroadcastChannel("broadcast_channel");
+const bibleSearchResultsChannel = new BroadcastChannel("bible_search_results_channel");
 
 channel.onmessage = (event) => {
-  if (event.data.type === "layout_change") {
-    showLayout(event.data.layout_id);
-  }
+  showLayout(event.data.layout_id);
+};
 
+bibleSearchResultsChannel.onmessage = (event) => {
+  const results = event.data.bible_search_results || [];
+   // Which div gets which translation
+  const containers = {
+    KOUGO: "kougo-search-results",
+    CUNP:  "cunp-search-results",
+    NIV:   "niv-search-results",
+  };
+
+  // (optional) simple HTML escape
+  const esc = (s) => String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+
+  // make one verse HTML block
+  const verseHTML = (v) =>
+    `<div class="verse"><sup class="verse-number">${v.verse}</sup>${esc(v.text)}</div>`;
+
+  // group results by translation
+  const byTrans = results.reduce((acc, r) => {
+    (acc[r.translation] ||= []).push(r);
+    return acc;
+  }, {});
+
+  // render into each container
+  for (const [t, elId] of Object.entries(containers)) {
+    const el = document.getElementById(elId);
+    const items = byTrans[t] || [];
+    el.innerHTML = items.length ? items.map(verseHTML).join("") : `<div class="muted">No results</div>`;
+  }
 };
 
 function getEmbeddableSlidesUrl(input) {

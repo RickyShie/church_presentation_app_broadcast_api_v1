@@ -12,8 +12,7 @@ def index():
 @app.route("/bible_search", methods=["GET", "POST"])
 def bible_search():
     # 1) Give each form a unique prefix so field names don't collide
-    form = BibleSearchForm(prefix="bible")
-    sermon_form = SermonMetadataForm(prefix="sermon")
+    form = BibleSearchForm()
 
     # 2) POST: detect which form was submitted and validate only that one
     if request.method == "POST":
@@ -41,34 +40,11 @@ def bible_search():
             # socketio.emit("bible_search_results", {"bible_search_results": results_json})
             flash("Bible search results sent to the display.", "success")
             return render_template("bible_search_form.html",
-                                   form=form,
-                                   sermon_form=sermon_form,
-                                   bible_search_results_json=results_json)
-
-
-        # --- Sermon Metadata form submitted ---
-        if sermon_form.submit.data and sermon_form.validate():
-            sermon_metadata_dict = {
-                "service_type":     sermon_form.service_type.data or "",
-                "jp_sermon_topic":  sermon_form.jp_sermon_topic.data or "",
-                "cn_sermon_topic":  sermon_form.cn_sermon_topic.data or "",
-                "speaker_name":     sermon_form.speaker_name.data or "",
-                "interpreter_name": sermon_form.interpreter_name.data or "",
-                "opening_hymn":     sermon_form.opening_hymn.data or "",
-                "closing_hymn":     sermon_form.closing_hymn.data or "",
-                "pianist_name":     sermon_form.pianist_name.data or "",
-            }
-
-            # socketio.emit("sermon_metadata", {"sermon_metadata": sermon_metadata_dict})
-            flash("Sermon metadata sent to the display.", "success")
-            return render_template("bible_search_form.html",
-                                   form=form,
-                                   sermon_form=sermon_form,
-                                   sermon_metadata=sermon_metadata_dict)
-
+                                   form=form, bible_search_results_json=results_json)
 
     # GET (or failed POST) – show both forms
-    return render_template("bible_search_form.html", form=form, sermon_form=sermon_form)
+    return render_template("bible_search_form.html", form=form)
+
 
 @app.route("/announcement_search", methods=["GET", "POST"])
 def announcement_search():
