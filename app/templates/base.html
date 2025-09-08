@@ -21,6 +21,7 @@
 
 <!--    <a id="hymn-search" href="#" class="tab {% if active_tab == 'hymn' %}active{% endif %} control_button">🎵 Hymn Search</a>-->
     <a id="display-announcement" onclick="changeLayout('display-announcement')" href="{{ url_for('announcement_search') }}" class="tab {% if active_tab == 'announcements' %}active{% endif %} control_button">📢 宣布事項</a>
+    <a href="{{ url_for('display') }}" class="tab {% if active_tab == 'announcements' %}active{% endif %} control_button" target="_blank">🖥️ 顯示頁面</a>
   </div>
 
   {% block content %}{% endblock %}

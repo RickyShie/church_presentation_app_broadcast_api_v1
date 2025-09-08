@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Set Sermon Metadata{% endblock %}
+{% block content %}
+<div class="form-grid">
+  <form action="" method="post" novalidate>
+    <h2>設定講道題目 & 讚美詩</h2>
+    {{ sermon_form.hidden_tag() }}
+    <h3>{{ sermon_form.service_type.label }}</h3>
+    <p>
+        {{ sermon_form.service_type }}
+    </p>
+    <h3>{{ sermon_form.jp_sermon_topic.label }}</h3>
+    <p>
+        {{ sermon_form.jp_sermon_topic }}
+    </p>
+    <h3>{{ sermon_form.cn_sermon_topic.label }}</h3>
+    <p>
+        {{ sermon_form.cn_sermon_topic }}
+    </p>
+    <h3>{{ sermon_form.speaker_name.label }}</h3>
+    <p>
+        {{ sermon_form.speaker_name }}
+    </p>
+    <h3>{{ sermon_form.interpreter_name.label }}</h3>
+    <p>
+        {{ sermon_form.interpreter_name }}
+    </p>
+    <h3>{{ sermon_form.opening_hymn.label }}</h3>
+    <p>
+        {{ sermon_form.opening_hymn }}
+    </p>
+    <h3>{{ sermon_form.closing_hymn.label }}</h3>
+    <p>
+        {{ sermon_form.closing_hymn }}
+    </p>
+    <h3>{{ sermon_form.pianist_name.label }}</h3>
+    <p>
+        {{ sermon_form.pianist_name }}
+    </p>
+    {{ sermon_form.submit(class="btn btn-primary") }}
+</form>
+    {% if sermon_metadata %}
+    <script>
+        const results = {{ sermon_metadata | tojson }};
+        channel.postMessage({ type: "set_sermon_metadata",  sermon_metadata: results});
+    </script>
+    {% endif %}
+</div>
+{% endblock %}

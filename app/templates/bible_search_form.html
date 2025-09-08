@@ -50,9 +50,8 @@
 </form>
     {% if bible_search_results_json %}
       <script>
-          const bibleSearchResultsChannel = new BroadcastChannel("bible_search_results_channel");
           const results = {{ bible_search_results_json | tojson }};
-          bibleSearchResultsChannel.postMessage({ bible_search_results: results });
+          channel.postMessage({ type: "bible_search", bible_search_results: results });
       </script>
     {% endif %}
 </div>

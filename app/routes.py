@@ -45,6 +45,27 @@ def bible_search():
     # GET (or failed POST) – show both forms
     return render_template("bible_search_form.html", form=form)
 
+@app.route("/set_sermon_metadata", methods=["GET", "POST"])
+def set_sermon_metadata():
+    sermon_form = SermonMetadataForm()
+    # --- Sermon Metadata form submitted ---
+    if sermon_form.submit.data and sermon_form.validate():
+        sermon_metadata_dict = {
+            "service_type": sermon_form.service_type.data or "",
+            "jp_sermon_topic": sermon_form.jp_sermon_topic.data or "",
+            "cn_sermon_topic": sermon_form.cn_sermon_topic.data or "",
+            "speaker_name": sermon_form.speaker_name.data or "",
+            "interpreter_name": sermon_form.interpreter_name.data or "",
+            "opening_hymn": sermon_form.opening_hymn.data or "",
+            "closing_hymn": sermon_form.closing_hymn.data or "",
+            "pianist_name": sermon_form.pianist_name.data or "",
+        }
+
+        # socketio.emit("sermon_metadata", {"sermon_metadata": sermon_metadata_dict})
+        flash("Sermon metadata sent to the display.", "success")
+        return render_template("set_sermon_metadata_form.html",
+                               sermon_form=sermon_form, sermon_metadata=sermon_metadata_dict)
+    return render_template("set_sermon_metadata_form.html", sermon_form=sermon_form)
 
 @app.route("/announcement_search", methods=["GET", "POST"])
 def announcement_search():
